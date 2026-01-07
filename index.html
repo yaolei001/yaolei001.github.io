@@ -1,383 +1,596 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎮 我的数字基地</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          keyframes: {
-            'float': { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-6px)' } }
-          },
-          animation: { 'float': 'float 3s ease-in-out infinite' }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小叶导航</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
-      }
-    }
-  </script>
-  <style>
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      transition: background-color 0.4s, color 0.4s;
-    }
-
-    .banner-default {
-      background: linear-gradient(90deg, #ff416c, #ff4b2b);
-    }
-
-    .app-card {
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .app-card:hover {
-      transform: translateY(-4px) scale(1.03);
-      box-shadow: 0 10px 30px rgba(255, 75, 43, 0.3);
-    }
-
-    .glow-btn {
-      position: relative;
-      overflow: hidden;
-    }
-    .glow-btn::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -60%;
-      width: 20px;
-      height: 200%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: rotate(25deg);
-      transition: all 0.6s;
-    }
-    .glow-btn:hover::after {
-      left: 120%;
-    }
-
-    #particles-js {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
-
-    .theme-toggle {
-      width: 52px;
-      height: 26px;
-      background: #ccc;
-      border-radius: 13px;
-      position: relative;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .theme-toggle::before {
-      content: '';
-      position: absolute;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: white;
-      top: 2px;
-      left: 2px;
-      transition: transform 0.3s;
-    }
-    .dark .theme-toggle {
-      background: #4b5563;
-    }
-    .dark .theme-toggle::before {
-      transform: translateX(26px);
-    }
-
-    /* 搜索框样式 */
-    #searchInput {
-      width: 100%;
-      max-width: 500px;
-      padding: 10px 16px;
-      border-radius: 30px;
-      border: none;
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      color: white;
-      font-size: 1rem;
-      margin-top: 12px;
-    }
-    #searchInput::placeholder {
-      color: rgba(255,255,255,0.7);
-    }
-    .dark #searchInput {
-      background: rgba(0,0,0,0.2);
-      color: white;
-    }
-  </style>
-</head>
-<body class="min-h-screen pb-12">
-
-  <!-- 粒子背景 -->
-  <div id="particles-js"></div>
-
-  <!-- 顶部横幅 -->
-  <div id="topBanner" class="h-20 w-full relative flex items-center px-4">
-    <div class="text-white font-bold text-lg">🎮 我的数字基地</div>
-    <div class="ml-auto mr-4">
-      <div class="theme-toggle" onclick="toggleTheme()"></div>
-    </div>
-  </div>
-
-  <!-- 搜索框（仅在有应用时显示） -->
-  <div id="searchContainer" class="max-w-4xl mx-auto px-4 mt-4 hidden">
-    <input type="text" id="searchInput" placeholder="🔍 搜索你的应用..." oninput="filterApps()" />
-  </div>
-
-  <!-- 应用网格 -->
-  <div id="appsContainer" class="max-w-4xl mx-auto px-4 mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5"></div>
-
-  <!-- 登录模态框 -->
-  <div id="loginModal" class="hidden fixed inset-0 flex items-center justify-center z-50">
-    <div class="bg-gray-900 p-6 rounded-xl w-80 backdrop-blur-sm border border-gray-700">
-      <h3 class="text-center font-bold text-lg mb-2 text-red-300">🔐 管理员登录</h3>
-      <input id="userInput" type="text" placeholder="用户名" class="w-full px-4 py-2.5 mb-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      <input id="pwdInput" type="password" placeholder="密码" class="w-full px-4 py-2.5 mb-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500" />
-      <button onclick="tryLogin()" class="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold rounded-lg glow-btn">登录</button>
-      <button onclick="closeModal('loginModal')" class="mt-2 w-full py-2 text-gray-400 hover:text-white">取消</button>
-    </div>
-  </div>
-
-  <!-- 管理面板 -->
-  <div id="adminPanel" class="hidden max-w-4xl mx-auto px-4 mt-6">
-    <div class="flex flex-wrap justify-center gap-3">
-      <button onclick="addApp()" class="px-5 py-2.5 bg-green-600 hover:bg-green-500 rounded-full font-medium glow-btn">➕ 添加应用</button>
-      <button onclick="deleteApp()" class="px-5 py-2.5 bg-red-600 hover:bg-red-500 rounded-full font-medium glow-btn">🗑️ 删除应用</button>
-      <button onclick="setBanner()" class="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 rounded-full font-medium glow-btn">🖼️ 更换横幅</button>
-      <button onclick="logout()" class="px-5 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-full font-medium glow-btn">🚪 退出管理</button>
-    </div>
-  </div>
-
-  <script>
-    // ===== 账号配置 =====
-    const ADMIN_USER = 'yaolei001';
-    const ADMIN_PASS = '135246Asd';
-
-    // 默认无应用（按你要求）
-    let apps = JSON.parse(localStorage.getItem('my_apps_v4')) || [];
-    let bannerUrl = localStorage.getItem('my_banner_v4') || '';
-    let isAdmin = localStorage.getItem('is_admin_v4') === 'true';
-    let isDark = localStorage.getItem('theme') !== 'light';
-
-    // ===== 初始化 =====
-    function initTheme() {
-      if (isDark) document.documentElement.classList.add('dark');
-      else document.documentElement.classList.remove('dark');
-    }
-
-    function initParticles() {
-      particlesJS('particles-js', {
-        particles: {
-          number: { value: isDark ? 80 : 50, density: { enable: true, value_area: 800 } },
-          color: { value: isDark ? "#ffffff" : "#888888" },
-          shape: { type: "circle" },
-          opacity: { value: 0.4, random: true },
-          size: { value: 3, random: true },
-          move: {
-            enable: true,
-            speed: 1.2,
-            direction: "none",
-            random: true,
-            out_mode: "out"
-          }
-        },
-        interactivity: {
-          detect_on: "canvas",
-          events: {
-            onhover: { enable: true, mode: "repulse" },
-            onclick: { enable: true, mode: "push" }
-          },
-          modes: {
-            repulse: { distance: 100 },
-            push: { particles_nb: 4 }
-          }
-        },
-        retina_detect: true
-      });
-    }
-
-    function toggleTheme() {
-      isDark = !isDark;
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      initTheme();
-      initParticles();
-    }
-
-    // ===== 长按触发登录 =====
-    let pressTimer = null;
-    const BANNER = document.getElementById('topBanner');
-    BANNER.addEventListener('mousedown', () => {
-      pressTimer = setTimeout(() => showLogin(), 1500);
-    });
-    ['mouseup', 'mouseleave'].forEach(evt => {
-      BANNER.addEventListener(evt, () => clearTimeout(pressTimer));
-    });
-
-    // ===== 渲染 & 搜索 =====
-    function renderApps(filtered = null) {
-      const container = document.getElementById('appsContainer');
-      const list = filtered !== null ? filtered : apps;
-      container.innerHTML = '';
-
-      if (list.length === 0) {
-        container.innerHTML = `<div class="col-span-full text-center py-8 text-gray-500">暂无应用</div>`;
-        document.getElementById('searchContainer').classList.add('hidden');
-        return;
-      }
-
-      document.getElementById('searchContainer').classList.remove('hidden');
-      list.forEach((app, idx) => {
-        const card = document.createElement('div');
-        card.className = 'app-card p-5 text-center cursor-pointer group ' +
-          (isDark ? 'bg-gray-800/30 border border-gray-700' : 'bg-white/40 border border-gray-300');
-
-        let clickHandler = () => window.open(app.link, '_blank');
-        if (isAdmin) {
-          // 管理员点击卡片可选择删除
-          clickHandler = () => {
-            if (confirm(`要删除「${app.name}」吗？\n（点“取消”正常打开）`)) {
-              apps.splice(idx, 1);
-              save();
-              renderApps();
-            } else {
-              window.open(app.link, '_blank');
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 0;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 0.3rem;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 0.9rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .tab-btn.active {
+background: rgba(255, 255, 255, 0.9);
+            color: #6a11cb;
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 横向滚动容器 */
+        .horizontal-scroll-container {
+            width: 100%;
+            overflow-x: auto;
+            padding: 10px 0;
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: rgba(255,255,255,0.3) transparent; /* Firefox */
+        }
+        
+        /* 隐藏默认滚动条，使用自定义样式 */
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 10px;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(255,255,255,0.5);
+        }
+        
+        /* 横向内容区域 - 使用flexbox实现横向排列 */
+        .content-section {
+            display: none; /* 默认隐藏 */
+        }
+        
+        .content-section.active {
+display: block; /* 显示当前内容 */
+        }
+        
+        .horizontal-content {
+            display: flex; /* 关键：使用flex实现横向排列 */
+            flex-direction: row; /* 明确指定横向排列 */
+            gap: 20px; /* 项目之间的间距 */
+            padding: 10px 5px;
+            min-height: 280px;
+        }
+        
+        .category-card {
+            min-width: 220px; /* 设置最小宽度，保证卡片不会太小 */
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+            flex: 0 0 auto; /* 不伸展不收缩，保持原始大小 */
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+        }
+        
+        .category-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .links-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.7rem;
+        }
+        
+        .link-item {
+            display: flex;
+            align-items: center;
+            padding: 0.6rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: #f8f9ff;
+            font-size: 0.95rem;
+        }
+        
+        .link-item:hover {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+        }
+        
+        .link-item i {
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .section-title {
+            font-size: 1.6rem;
+            margin: 0 0 15px 15px;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            width: 100%;
+            padding: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
             }
-          };
+            
+            .category-card {
+                min-width: 180px;
+                padding: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.4rem;
+                margin-left: 10px;
+            }
         }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>小叶导航</h1>
+            <p class="subtitle">横向浏览 · 一触即达</p>
+        </header>
+        
+        <div class="search-box">
+            <input type="text" id="search" placeholder="输入关键词搜索应用...">
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-target="apps">📱 常用应用</button>
+            <button class="tab-btn" data-target="entertainment">🎬 娱乐影音</button>
+            <button class="tab-btn" data-target="tools">🛠️ 实用工具</button>
+            <button class="tab-btn" data-target="games">🎮 游戏平台</button>
+        </div>
+        
+        <!-- 常用应用 -->
+        <section id="apps" class="content-section active">
+            <h2 class="section-title">常用应用推荐</h2>
+            <div class="horizontal-scroll-container">
+                <div class="horizontal-content">
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-search"></i> 搜索工具</h3>
+                        <div class="links-grid">
+                            <a href="https://www.baidu.com" class="link-item"><i class="fab fa-baidu"></i> 百度</a>
+                            <a href="https://www.google.com" class="link-item"><i class="fab fa-google"></i> Google</a>
+                            <a href="https://www.bing.com" class="link-item"><i class="fab fa-microsoft"></i> Bing</a>
+                            <a href="https://www.sogou.com" class="link-item"><i class="fas fa-search"></i> 搜狗</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fab fa-weixin"></i> 社交媒体</h3>
+                        <div class="links-grid">
+                            <a href="https://weixin.qq.com" class="link-item"><i class="fab fa-weixin"></i> 微信</a>
+                            <a href="https://www.weibo.com" class="link-item"><i class="fab fa-weibo"></i> 微博</a>
+                            <a href="https://www.zhihu.com" class="link-item"><i class="fab fa-zhihu"></i> 知乎</a>
+                            <a href="https://www.doubao.com" class="link-item"><i class="fas fa-comments"></i> 豆瓣</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-cloud"></i> 云存储</h3>
+                        <div class="links-grid">
+                            <a href="https://www.aliyundrive.com" class="link-item"><i class="fab fa-alipay"></i> 阿里云盘</a>
+                            <a href="https://pan.baidu.com" class="link-item"><i class="fab fa-baidu"></i> 百度网盘</a>
+                            <a href="https://www.icloud.com" class="link-item"><i class="fab fa-apple"></i> iCloud</a>
+                            <a href="https://www.onedrive.com" class="link-item"><i class="fab fa-microsoft"></i> OneDrive</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-shopping-cart"></i> 购物电商</h3>
+                        <div class="links-grid">
+                            <a href="https://www.taobao.com" class="link-item"><i class="fab fa-taobao"></i> 淘宝</a>
+                            <a href="https://www.jd.com" class="link-item"><i class="fas fa-shopping-basket"></i> 京东</a>
+                            <a href="https://www.pinduoduo.com" class="link-item"><i class="fas fa-gift"></i> 拼多多</a>
+                            <a href="https://www.amazon.com" class="link-item"><i class="fab fa-amazon"></i> 亚马逊</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-money-bill-wave"></i> 金融服务</h3>
+                        <div class="links-grid">
+                            <a href="https://www.alipay.com" class="link-item"><i class="fab fa-alipay"></i> 支付宝</a>
+                            <a href="https://www.wechatpay.com" class="link-item"><i class="fab fa-weixin"></i> 微信支付</a>
+                            <a href="https://www.icbc.com.cn" class="link-item"><i class="fas fa-university"></i> 工商银行</a>
+                            <a href="https://www.cmbc.com.cn" class="link-item"><i class="fas fa-credit-card"></i> 民生银行</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-bus"></i> 出行服务</h3>
+                        <div class="links-grid">
+                            <a href="https://www.didachuxing.com" class="link-item"><i class="fas fa-taxi"></i> 滴滴出行</a>
+                            <a href="https://www.gaode.com" class="link-item"><i class="fas fa-map-marked-alt"></i> 高德地图</a>
+                            <a href="https://www.12306.cn" class="link-item"><i class="fas fa-train"></i> 12306</a>
+                            <a href="https://www.ctrip.com" class="link-item"><i class="fas fa-suitcase"></i> 携程旅行</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 娱乐影音 -->
+        <section id="entertainment" class="content-section">
+            <h2 class="section-title">娱乐影音推荐</h2>
+            <div class="horizontal-scroll-container">
+                <div class="horizontal-content">
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-film"></i> 视频平台</h3>
+                        <div class="links-grid">
+                            <a href="https://www.iqiyi.com" class="link-item"><i class="fas fa-film"></i> 爱奇艺</a>
+                            <a href="https://www.youku.com" class="link-item"><i class="fab fa-youtube"></i> 优酷</a>
+                            <a href="https://www.v.qq.com" class="link-item"><i class="fab fa-tencent"></i> 腾讯视频</a>
+                            <a href="https://www.mgtv.com" class="link-item"><i class="fas fa-tv"></i> 芒果TV</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-music"></i> 音乐平台</h3>
+                        <div class="links-grid">
+                            <a href="https://music.163.com" class="link-item"><i class="fas fa-headphones"></i> 网易云音乐</a>
+                            <a href="https://www.qqmusic.com" class="link-item"><i class="fab fa-tencent"></i> QQ音乐</a>
+                            <a href="https://www.kugou.com" class="link-item"><i class="fas fa-music"></i> 酷狗音乐</a>
+                            <a href="https://www.xiami.com" class="link-item"><i class="fas fa-guitar"></i> 虾米音乐</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-podcast"></i> 短视频</h3>
+                        <div class="links-grid">
+                            <a href="https://www.douyin.com" class="link-item"><i class="fab fa-tiktok"></i> 抖音</a>
+                            <a href="https://www.kuaishou.com" class="link-item"><i class="fas fa-bolt"></i> 快手</a>
+                            <a href="https://www.bilibili.com" class="link-item"><i class="fab fa-bilibili"></i> 哔哩哔哩</a>
+                            <a href="https://www.xiaohongshu.com" class="link-item"><i class="fas fa-bookmark"></i> 小红书</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-book-open"></i> 阅读平台</h3>
+                        <div class="links-grid">
+                            <a href="https://www.qq.com" class="link-item"><i class="fab fa-tencent"></i> QQ阅读</a>
+                            <a href="https://www.zongheng.com" class="link-item"><i class="fas fa-book"></i> 纵横中文</a>
+                            <a href="https://www.jjwxc.net" class="link-item"><i class="fas fa-feather"></i> 晋江文学</a>
+                            <a href="https://weread.qq.com" class="link-item"><i class="fas fa-glasses"></i> 微信读书</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-gamepad"></i> 直播平台</h3>
+                        <div class="links-grid">
+                            <a href="https://www.huya.com" class="link-item"><i class="fas fa-broadcast-tower"></i> 虎牙直播</a>
+                            <a href="https://www.douyu.com" class="link-item"><i class="fas fa-fish"></i> 斗鱼直播</a>
+                            <a href="https://www.bilibili.com/live" class="link-item"><i class="fab fa-bilibili"></i> B站直播</a>
+                            <a href="https://www.kuaishou.com/live" class="link-item"><i class="fas fa-bolt"></i> 快手直播</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-camera-movie"></i> 电影资讯</h3>
+                        <div class="links-grid">
+                            <a href="https://www.mtime.com" class="link-item"><i class="fas fa-clock"></i> 时光网</a>
+                            <a href="https://www.douban.com/movie" class="link-item"><i class="fab fa-douban"></i> 豆瓣电影</a>
+                            <a href="https://www.maoyan.com" class="link-item"><i class="fas fa-ticket-alt"></i> 猫眼电影</a>
+                            <a href="https://www.cbooo.cn" class="link-item"><i class="fas fa-chart-line"></i> 灯塔专业版</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 实用工具 -->
+<section id="tools" class="content-section">
+            <h2 class="section-title">实用工具推荐</h2>
+            <div class="horizontal-scroll-container">
+                <div class="horizontal-content">
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-file-alt"></i> 办公软件</h3>
+                        <div class="links-grid">
+                            <a href="https://www.office.com" class="link-item"><i class="fab fa-microsoft"></i> Microsoft 365</a>
+                            <a href="https://www.wps.com" class="link-item"><i class="fas fa-file-word"></i> WPS Office</a>
+                            <a href="https://docs.qq.com" class="link-item"><i class="fab fa-tencent"></i> 腾讯文档</a>
+                            <a href="https://www.yuque.com" class="link-item"><i class="fas fa-book"></i> 语雀</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-palette"></i> 设计工具</h3>
+                        <div class="links-grid">
+                            <a href="https://www.figma.com" class="link-item"><i class="fab fa-figma"></i> Figma</a>
+                            <a href="https://www.canva.cn" class="link-item"><i class="fas fa-paint-brush"></i> Canva</a>
+                            <a href="https://www.photoshop.com" class="link-item"><i class="fab fa-adobe"></i> Photoshop</a>
+                            <a href="https://www.mockplus.cn" class="link-item"><i class="fas fa-vector-square"></i> 墨刀</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-code"></i> 开发工具</h3>
+                        <div class="links-grid">
+                            <a href="https://github.com" class="link-item"><i class="fab fa-github"></i> GitHub</a>
+                            <a href="https://gitee.com" class="link-item"><i class="fab fa-git-alt"></i> Gitee</a>
+                            <a href="https://codepen.io" class="link-item"><i class="fab fa-codepen"></i> CodePen</a>
+                            <a href="https://www.jetbrains.com" class="link-item"><i class="fas fa-cogs"></i> JetBrains</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-language"></i> 学习平台</h3>
+                        <div class="links-grid">
+                            <a href="https://www.coursera.org" class="link-item"><i class="fas fa-graduation-cap"></i> Coursera</a>
+                            <a href="https://www.edx.org" class="link-item"><i class="fas fa-university"></i> edX</a>
+                            <a href="https://www.xuexi.cn" class="link-item"><i class="fas fa-book-open"></i> 学习强国</a>
+                            <a href="https://www.imooc.com" class="link-item"><i class="fas fa-chalkboard-teacher"></i> 慕课网</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-shield-alt"></i> 安全工具</h3>
+                        <div class="links-grid">
+                            <a href="https://www.virustotal.com" class="link-item"><i class="fas fa-virus-slash"></i> VirusTotal</a>
+                            <a href="https://haveibeenpwned.com" class="link-item"><i class="fas fa-user-secret"></i> Have I Been Pwned</a>
+                            <a href="https://www.lastpass.com" class="link-item"><i class="fas fa-key"></i> LastPass</a>
+                            <a href="https://www.trendmicro.com" class="link-item"><i class="fas fa-shield-alt"></i> 趋势科技</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-cogs"></i> 系统工具</h3>
+                        <div class="links-grid">
+                            <a href="https://www.7-zip.org" class="link-item"><i class="fas fa-file-archive"></i> 7-Zip</a>
+                            <a href="https://www.teamviewer.com" class="link-item"><i class="fas fa-desktop"></i> TeamViewer</a>
+                            <a href="https://www.bandisoft.com/bandizip" class="link-item"><i class="fas fa-file-zipper"></i> Bandizip</a>
+                            <a href="https://www.utorrent.com" class="link-item"><i class="fas fa-magnet"></i> uTorrent</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 游戏平台 -->
+        <section id="games" class="content-section">
+            <h2 class="section-title">游戏平台推荐</h2>
+            <div class="horizontal-scroll-container">
+                <div class="horizontal-content">
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fab fa-steam"></i> PC游戏</h3>
+                        <div class="links-grid">
+                            <a href="https://store.steampowered.com" class="link-item"><i class="fab fa-steam"></i> Steam</a>
+                            <a href="https://www.epicgames.com" class="link-item"><i class="fab fa-epic"></i> Epic Games</a>
+                            <a href="https://www.origin.com" class="link-item"><i class="fab fa-playstation"></i> Origin</a>
+                            <a href="https://www.gog.com" class="link-item"><i class="fas fa-gamepad"></i> GOG</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fab fa-apple"></i> 手游平台</h3>
+                        <div class="links-grid">
+                            <a href="https://www.apple.com/app-store" class="link-item"><i class="fab fa-app-store"></i> App Store</a>
+                            <a href="https://play.google.com" class="link-item"><i class="fab fa-google-play"></i> Google Play</a>
+                            <a href="https://www.taptap.cn" class="link-item"><i class="fas fa-mobile-alt"></i> TapTap</a>
+                            <a href="https://www.xiaomi.com/game" class="link-item"><i class="fab fa-android"></i> 小米游戏</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-play-circle"></i> 网页游戏</h3>
+                        <div class="links-grid">
+                            <a href="https://www.4399.com" class="link-item"><i class="fas fa-dice"></i> 4399小游戏</a>
+                            <a href="https://www.7k7k.com" class="link-item"><i class="fas fa-puzzle-piece"></i> 7k7k</a>
+                            <a href="https://www.h5game.com" class="link-item"><i class="fas fa-laptop-code"></i> H5游戏</a>
+                            <a href="https://www.2144.cn" class="link-item"><i class="fas fa-gamepad"></i> 2144</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-headset"></i> 游戏社区</h3>
+                        <div class="links-grid">
+                            <a href="https://www.xbox.com" class="link-item"><i class="fab fa-xbox"></i> Xbox</a>
+                            <a href="https://www.playstation.com" class="link-item"><i class="fab fa-playstation"></i> PlayStation</a>
+                            <a href="https://www.nintendo.com" class="link-item"><i class="fad fa-nintendo-switch"></i> Nintendo</a>
+                            <a href="https://www.twitch.tv" class="link-item"><i class="fab fa-twitch"></i> Twitch</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-gamepad"></i> 独立游戏</h3>
+                        <div class="links-grid">
+                            <a href="https://itch.io" class="link-item"><i class="fas fa-gamepad"></i> itch.io</a>
+                            <a href="https://www.humblebundle.com" class="link-item"><i class="fas fa-gift"></i> Humble Bundle</a>
+                            <a href="https://www.indiegala.com" class="link-item"><i class="fas fa-donate"></i> IndieGala</a>
+                            <a href="https://www.drmartens.com" class="link-item"><i class="fas fa-shoe-prints"></i> Dr. Martens</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <h3 class="category-title"><i class="fas fa-trophy"></i> 电竞赛事</h3>
+                        <div class="links-grid">
+                            <a href="https://www.lol.esports" class="link-item"><i class="fas fa-chess-knight"></i> LOL赛事</a>
+                            <a href="https://www.dota2.com/esports" class="link-item"><i class="fas fa-dragon"></i> DOTA2赛事</a>
+                            <a href="https://www.pgl.com" class="link-item"><i class="fas fa-trophy"></i> PGL赛事</a>
+                            <a href="https://www.ea.com/games/fifa" class="link-item"><i class="fas fa-futbol"></i> FIFA赛事</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="footer">
+            <p>小叶导航 © 2026 | 横向浏览 · 高效体验</p>
+            <p style="margin-top: 0.3rem; font-size: 0.85rem; opacity: 0.7;">左右滑动发现更多应用</p>
+        </div>
+    </div>
 
-        card.innerHTML = `
-          <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">${app.icon}</div>
-          <div class="font-semibold text-sm truncate">${app.name}</div>
-          <div class="mt-2 text-xs bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent font-bold">Launch</div>
-        `;
-        card.onclick = clickHandler;
-        container.appendChild(card);
-      });
-    }
-
-    function filterApps() {
-      const term = document.getElementById('searchInput').value.toLowerCase().trim();
-      if (!term) {
-        renderApps();
-        return;
-      }
-      const filtered = apps.filter(a => a.name.toLowerCase().includes(term));
-      renderApps(filtered);
-    }
-
-    // ===== 管理功能 =====
-    function showAdminPanel() {
-      document.getElementById('adminPanel').classList.remove('hidden');
-    }
-
-    function hideAdminPanel() {
-      document.getElementById('adminPanel').classList.add('hidden');
-    }
-
-    function save() {
-      localStorage.setItem('my_apps_v4', JSON.stringify(apps));
-      localStorage.setItem('my_banner_v4', bannerUrl);
-      localStorage.setItem('is_admin_v4', String(isAdmin));
-    }
-
-    function showLogin() {
-      document.getElementById('loginModal').classList.remove('hidden');
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
-    function tryLogin() {
-      const user = document.getElementById('userInput').value.trim();
-      const pass = document.getElementById('pwdInput').value;
-      if (user === ADMIN_USER && pass === ADMIN_PASS) {
-        isAdmin = true;
-        save();
-        showAdminPanel();
-        closeModal('loginModal');
-        renderApps(); // 刷新以启用管理点击
-      } else {
-        alert('❌ 用户名或密码错误');
-      }
-    }
-
-    function logout() {
-      isAdmin = false;
-      save();
-      hideAdminPanel();
-      renderApps(); // 切回普通模式
-    }
-
-    function addApp() {
-      if (!isAdmin) return;
-      const name = prompt('应用查看名称？（如：Steam）');
-      if (!name) return;
-      const icon = prompt('图标（支持 emoji，如 🎮）？');
-      if (!icon) return;
-      let link = prompt('完整网址？（如 https://store.steampowered.com）');
-      if (!link) return;
-      if (!link.startsWith('http')) link = 'https://' + link;
-      apps.push({ name: name.trim(), icon: icon.trim(), link: link.trim() });
-      save();
-      renderApps();
-    }
-
-    function deleteApp() {
-      if (!isAdmin || apps.length === 0) {
-        alert('没有可删除的应用');
-        return;
-      }
-      const list = apps.map((a, i) => `${i+1}. ${a.name}`).join('\n');
-      const idx = prompt(`输入要删除的应用序号：\n${list}`);
-      const i = parseInt(idx) - 1;
-      if (i >= 0 && i < apps.length) {
-        apps.splice(i, 1);
-        save();
-        renderApps();
-        alert('✅ 已删除');
-      } else {
-        alert('无效序号');
-      }
-    }
-
-    function setBanner() {
-      if (!isAdmin) return;
-      const url = prompt('输入横幅图片 URL（建议 1920x300）：\n留空恢复默认');
-      bannerUrl = url?.trim() || '';
-      save();
-      init(); // 重新初始化整个页面
-    }
-
-    function init() {
-      initTheme();
-      initParticles();
-
-      const bannerEl = BANNER;
-      if (bannerUrl) {
-        bannerEl.style.backgroundImage = `url(${bannerUrl})`;
-        bannerEl.style.backgroundSize = 'cover';
-        bannerEl.style.backgroundPosition = 'center';
-      } else {
-        bannerEl.classList.add('banner-default');
-      }
-
-      renderApps();
-      if (isAdmin) showAdminPanel();
-    }
-
-    document.addEventListener('DOMContentLoaded', init);
-  </script>
+    <script>
+        document.addEventListener
+('DOMContentLoaded', function() {
+            // 标签切换功能
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 移除所有按钮的active类
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    // 为当前点击的按钮添加active类
+                    this.classList.add('active');
+                    
+                    // 隐藏所有内容区域
+                    contentSections.forEach(section => section.classList.remove('active'));
+                    
+                    // 显示对应的内容区域
+                    const targetId = this.getAttribute('data-target');
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+            
+            // 搜索功能
+            document.getElementById('search').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const activeSection = document.querySelector('.content-section.active');
+                
+                if (activeSection) {
+                    const linkItems = activeSection.querySelectorAll('.link-item');
+                    linkItems.forEach(item => {
+                        const text = item.textContent.toLowerCase();
+                        if (text.includes(searchTerm)) {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                }
+            });
+            
+            // 为每个横向滚动容器添加鼠标滚轮支持
+            const scrollContainers = document.querySelectorAll('.horizontal-scroll-container');
+            scrollContainers.forEach(container => {
+                container.addEventListener('wheel', (e) => {
+                    if (e.deltaY !== 0) {
+                        e.preventDefault();
+                        container.scrollLeft += e.deltaY;
+                    }
+                });
+            });
+            
+            // 添加首屏自动聚焦到搜索框
+            document.getElementById('search').focus();
+        });
+    </script>
 </body>
 </html>
