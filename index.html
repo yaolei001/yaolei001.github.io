@@ -594,3 +594,171 @@ display: block; /* 显示当前内容 */
     </script>
 </body>
 </html>
+<html>
+ <head> 
+  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> 
+  <title>WebCat</title> 
+  <style>
+      body {
+         perspective: 800px;
+         
+}
+       section {
+         position: relative;
+         width: 120px;
+         height: 120px;
+         margin: 300px auto;
+         animation: dh 10s linear infinite forwards;
+         transform-style: preserve-3d;
+         
+         
+}
+     @keyframes dh {
+         0% {
+         transform: rotatey(0deg) rotatey(0deg);
+         
+}
+
+         
+         100% {
+         transform: rotatex(360deg) rotatey(360deg);
+         
+         
+}
+}
+      section div {
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: pink;
+         transition: all 1s linear;
+}
+     section div:nth-child(1) {
+        transform: translatez(45px);
+        width: 75%;
+        height: 75%;
+        
+}
+     section div:nth-child(2) {
+        transform:  rotatey(90deg) translatez(45px);
+        width: 75%;
+        height: 75%;
+}
+     section div:nth-child(3) {
+        transform:  rotatey(90deg) translatez(-45px);
+        width: 75%;
+        height: 75%;
+}
+     section div:nth-child(4) {
+        transform:  translatez(-45px);
+        width: 75%;
+        height: 75%;
+}
+     section div:nth-child(5) {
+        transform:  rotatex(90deg) translatez(-45px);
+        width: 75%;
+        height: 75%;
+} 
+     section div:nth-child(6) {
+        transform:  rotatex(90deg) translatez(45px);
+        width: 75%;
+        height: 75%;
+}
+     section div:nth-child(7) {
+        transform: translatez(60px);
+        
+}
+     section div:nth-child(8) {
+        transform:  rotatey(90deg) translatez(60px);
+
+}
+     section div:nth-child(9) {
+        transform:  rotatey(90deg) translatez(-60.5px);
+}
+     section div:nth-child(10) {
+        transform:  translatez(-60px);
+}
+     
+       section div:nth-child(11) {
+background-color: #000000;
+        transform:  rotatex(90deg) translatez(-60px);
+} 
+     section div:nth-child(12) {
+background-color: #000000;
+        transform:  rotatex(90deg) translatez(60px);
+}
+     section div img:nth-child(n+7) {
+        opacity: 0.3;
+
+}
+
+
+     section:hover #v9 {
+        transform:  translatez(150px);
+}
+     section:hover #v10 {
+        transform: rotatey(90deg) translatez(150px);
+}
+     section:hover #v11 {
+        transform: rotatey(90deg) translatez(-150px);
+}
+     section:hover #v12 {
+        transform: translatez(-150px);
+}
+     section:hover #v13 {
+        transform: rotatex(90deg) translatez(-150px);
+}
+     section:hover #v14 {
+        transform: rotatex(90deg) translatez(150px);
+}
+    img {
+       width: 100%;
+       height: 100%;
+}
+   
+</style> 
+  <script src="js/jq.js"></script> 
+ </head> 
+ <body id="v1"> 
+  <section id="v2"> 
+   <div id="v3"> 
+    <img id="v15" src="img/1.jpg"> 
+   </div> 
+   <div id="v4"> 
+    <img id="v16" src="img/1.jpg"> 
+   </div> 
+   <div id="v5"> 
+    <img id="v17" src="img/1.jpg"> 
+   </div> 
+   <div id="v6"> 
+    <img id="v18" src="img/1.jpg"> 
+   </div> 
+   <div id="v7"> 
+    <img id="v19" src="img/1.jpg"> 
+   </div> 
+   <div id="v8"> 
+    <img id="v20" src="img/1.jpg"> 
+   </div> 
+   <div id="v9"> 
+    <img id="v21" src="img/1.jpg"> 
+   </div> 
+   <div id="v10"> 
+    <img id="v22" src="img/1.jpg"> 
+   </div> 
+   <div id="v11"> 
+    <img id="v23" src="img/1.jpg"> 
+   </div> 
+   <div id="v12"> 
+    <img id="v24" src="img/1.jpg"> 
+   </div> 
+   <div id="v13"> 
+    <img id="v25" src="img/1.jpg"> 
+   </div> 
+   <div id="v14"> 
+    <img id="v26" src="img/1.jpg"> 
+   </div> 
+  </section>  
+ </body>
+</html>
