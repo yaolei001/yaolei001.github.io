@@ -1,15 +1,545 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>小叶导航</title>
-    <script type="module" crossorigin src="/assets/index-DPpPHCTN.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-BEBz4CjY.css">
-<script type="text/javascript" src="//js.users.51.la/21979257.js"></script>
-  </head>
-  <body>
-    <div id="app"></div>
-  </body>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="/Public/static/annie/img/fovicon.ico">
+    <title>甜GG致富合集</title>
+    <meta name="google-site-verification" content="FINDSr7GU2MfCZ9NVBBLPrgGHDXfffBCbywFI5YZWOs">
+    <meta name="description" content="旺旺： 46676718 飞机✈️：@A20070618">
+    <meta name="keywords" content="旺旺： 46676718 飞机✈️：@A20070618,一个完全免费的导航站">
+    <meta name="author" content="旺旺： 46676718 飞机✈️：@A20070618">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+        
+        /* 头部样式 */
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 15px 20px;
+            background: linear-gradient(90deg, #4e54c8, #8f94fb);
+            color: white;
+        }
+        .header .left { display: flex; align-items: center; }
+        .header .ava { width: 40px; height: 40px; margin-right: 10px; }
+        .header .text p { font-size: 16px; font-weight: bold; }
+        .header .text-min { font-size: 12px; opacity: 0.9; }
+        
+        /* PC媒体查询 */
+        @media (min-width: 768px) {
+            .pc-media { padding: 20px; }
+            .header-2 { 
+                text-align: center; 
+                margin-bottom: 20px;
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            .big-text { 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                margin: 15px 0;
+            }
+            .big-text h1 { 
+                font-size: 24px; 
+                color: #4e54c8;
+                margin-left: 10px;
+            }
+            .info-text { 
+                display: flex; 
+                justify-content: space-between;
+                margin-top: 15px;
+                font-size: 14px;
+            }
+        }
+        
+        /* 跑马灯 */
+        .msg { margin: 10px; }
+        .van-notice-bar {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            border-radius: 5px;
+        }
+        
+        /* 主内容区 */
+        .main-box { padding: 15px; }
+        .nav { 
+            display: flex; 
+            background: white;
+            border-radius: 5px 5px 0 0;
+            overflow: hidden;
+        }
+        .tab { 
+            flex: 1; 
+            text-align: center; 
+            padding: 12px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+        }
+        .tab.li-active { 
+            background: #4e54c8; 
+            color: white;
+        }
+        
+        /* 网站列表 */
+        .content-box { 
+            background: white; 
+            padding: 15px;
+            border-radius: 0 0 5px 5px;
+        }
+        .content-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        @media (min-width: 768px) {
+            .content-list { grid-template-columns: repeat(4, 1fr); }
+        }
+        .content-item {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .content-item:hover { transform: translateY(-5px); }
+        .content-item a { 
+            display: block; 
+            text-decoration: none;
+            color: #333;
+        }
+        .content-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+        .text-1 {
+            padding: 10px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+        
+        /* 卡片样式 */
+        .main-2 { margin-top: 20px; }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .card {
+            display: block;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .card-main {
+            display: flex;
+            align-items: center;
+        }
+        .card-main img {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+        }
+        .card-info p:first-child {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .card-info p:last-child {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        /* 广告横幅 */
+        .main-3 {
+            margin-top: 20px;
+        }
+        .main-3 a {
+            display: block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 10px;
+            overflow: hidden;
+            text-decoration: none;
+            color: white;
+        }
+        .main-3 img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .main-3-info {
+            padding: 15px;
+            text-align: center;
+        }
+        .main-3-info p:first-child {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        /* 页脚 */
+        .footer-sj {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* Google样式 */
+        .google-logo {
+            display: inline-flex;
+            font-weight: bold;
+        }
+        .google-logo span:nth-child(1) { color: #4285f4; }
+        .google-logo span:nth-child(2) { color: #ea4335; }
+        .google-logo span:nth-child(3) { color: #fbbc05; }
+        .google-logo span:nth-child(4) { color: #4285f4; }
+        .google-logo span:nth-child(5) { color: #34a853; }
+        .google-logo span:nth-child(6) { color: #ea4335; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="left">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iMjAiIGZpbGw9IiM0ZTU0YzgiLz4KPHBhdGggZD0iTTIwIDEwQzI0LjQxOCAxMCAyOCAxMy41ODIgMjggMThDMjggMjIuNDE4IDI0LjQxOCAyNiAyMCAyNkMxNS41ODIgMjYgMTIgMjIuNDE4IDEyIDE4QzEyIDEzLjU4MiAxNS41ODIgMTAgMjAgMTBaTTIwIDI5QzI1LjUyMiAyOSAzMCAyNC41MjIgMzAgMTlDMzAgMTMuNDc4IDI1LjUyMiA5IDIwIDlDMTQuNDc4IDkgMTAgMTMuNDc4IDEwIDE5QzEwIDI0LjUyMiAxNC40NzggMjkgMjAgMjlaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K" alt="甜GG" class="ava">
+            <div class="text">
+                <p>欢迎来甜GG致富合集</p>
+                <div class="text-min">甜GG.cc</div>
+            </div>
+        </div>
+        <div class="right">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iI2ZmNmI2YiIvPgo8dGV4dCB4PSIyMCIgeT0iMjUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+546LPC90ZXh0Pgo8L3N2Zz4K" alt="甜" style="width:40px">
+        </div>
+    </div>
+
+    <div class="pc-media">
+        <div class="header-2">
+            <p>欢迎光临本站</p>
+            <div class="big-text">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE5IDE5SDVWNUgxMk0xOSA1TDUgMTlNMTkgNVYxOUg1IiBzdHJva2U9IiM0ZTU0YzgiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=" alt="链接" style="width:20px; margin-right:10px;">
+                <p>甜GG.cc</p>
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMNCA3VjIwSDEwVjE0SDE0VjIwSDIwVjdMMTIgMlpNMTIgNEwxOCA3VjE4SDE2VjEySDhWMThINlY3TDEyIDRaIiBmaWxsPSIjNGU1NGM4Ii8+Cjwvc3ZnPgo=" alt="logo" style="width:20px; margin-left:10px;">
+                <h1>甜GG致富合集</h1>
+            </div>
+            <div class="info-text">
+                <p>旺旺：46676718 飞机✈️：@A20070618</p>
+                <div class="google">
+                    <div class="google-logo">
+                        <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+                    </div>
+                    <span>搜索-甜GG致富合集</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="msg">
+                <div class="van-notice-bar">
+                    <marquee direction="left">长期返现活动充一百送18.88充700返288充1000返488达标请联系旺旺/飞机！！！！！</marquee>
+                </div>
+            </div>
+
+            <div class="main-box">
+                <div class="main-1 nav">
+                    <ul id="tab" style="display: flex; width: 100%; list-style: none;">
+                        <li class="tab li-active" onclick="switchTab(0)">精品网站</li>
+                        <li class="tab" onclick="switchTab(1)">推荐网站</li>
+                        <li class="tab" onclick="switchTab(2)">精选视频</li>
+                    </ul>
+                </div>
+
+                <div class="main-1-content">
+                    <!-- 精品网站 -->
+                    <div class="content-box tab_cont" id="tab0" style="display: block;">
+                        <div class="content-list">
+                            <!-- 网站1 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="https://derear.fnbpsw.com/app/register.php?site_id=1059" target="_blank">
+                                    <img src="https://via.placeholder.com/300x100/4e54c8/ffffff?text=新时代娱乐" alt="新时代娱乐">
+                                    <div class="text-1">
+                                        <span>新时代（未开业）可下载</span>
+                                   </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 网站2 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="https://sshi.vip/?id=342481927" target="_blank">
+                                    <img src="https://via.placeholder.com/300x100/8f94fb/ffffff?text=盛世国际" alt="盛世国际">
+                                    <div class="text-1">
+                                        <span>盛世国际</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 网站3 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="https://4807777.cc/?id=646896883" target="_blank">
+                                    <img src="https://via.placeholder.com/300x100/667eea/ffffff?text=金沙国际" alt="金沙国际">
+                                    <div class="text-1">
+                                        <span>金沙国际</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 网站4 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="https://onkrcy.fnbpsw.com/app/register.php?site_id=2080" target="_blank">
+                                    <img src="https://via.placeholder.com/300x100/764ba2/ffffff?text=凯旋国际" alt="凯旋国际">
+                                    <div class="text-1">
+                                        <span>凯旋国际</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 网站5 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="https://lejva.tprsmi.com/app/register.php?site_id=1058" target="_blank">
+                                    <img src="https://via.placeholder.com/300x100/f093fb/ffffff?text=胜天国际" alt="胜天国际">
+                                    <div class="text-1">
+                                        <span>胜天国际</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 网站6 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="https://gedxs.hcjwj.com/app/register.php?site_id=1057" target="_blank">
+                                    <img src="https://via.placeholder.com/300x100/f5576c/ffffff?text=星耀国际" alt="星耀国际">
+                                    <div class="text-1">
+                                        <span>星耀国际</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 网站7 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="https://103.39.18.211:7788" target="_blank">
+                                    <img src="https://via.placeholder.com/300x100/ff6b6b/ffffff?text=C7娱乐" alt="C7娱乐">
+                                    <div class="text-1">
+                                        <span>C7娱乐</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 网站8 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="https://gfvgx.jgqvji.com/app/register.php?site_id=800" target="_blank">
+                                    <img src="https://via.placeholder.com/300x100/4ecdc4/ffffff?text=壹号国际" alt="壹号国际">
+                                    <div class="text-1">
+                                        <span>壹号国际</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 推荐网站 -->
+                    <div class="content-box tab_cont" id="tab1" style="display: none;">
+                        <div class="content-list">
+                            <!-- 推荐网站1 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="https://lncqc.jgqvji.com/app/register.php?site_id=1050" target="_blank">
+                                    <img src="https://via.placeholder.com/300x100/45b7d1/ffffff?text=非凡国际" alt="非凡国际">
+                                    <div class="text-1">
+                                        <span>非凡国际</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 推荐网站2 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="https://xjvueb.fnbpsw.com/app/register.php?site_id=1010" target="_blank">
+                                    <img src="https://via.placeholder.com/300x100/96e6a1/ffffff?text=赏金国际" alt="赏金国际">
+                                    <div class="text-1">
+                                        <span>赏金国际</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 推荐网站3 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="https://nvjmce.hfjcl.com/app/register.php?site_id=1019" target="_blank">
+                                    <img src="https://via.placeholder.com/300x100/f9d423/ffffff?text=NG体育" alt="NG体育">
+                                    <div class="text-1">
+                                        <span>NG体育</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 推荐网站4 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="https://pkajim.hfjcl.com/app/register.php?site_id=1031" target="_blank">
+                                    <img src="https://via.placeholder.com/300x100/fda085/ffffff?text=征途国际" alt="征途国际">
+                                    <div class="text-1">
+                                        <span>征途国际</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 精选视频 -->
+                    <div class="content-box tab_cont" id="tab2" style="display: none;">
+                        <div class="content-list">
+                            <!-- 视频1 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="#" onclick="alert('视频功能开发中')">
+                                    <div style="background: linear-gradient(135deg, #667eea, #764ba2); height:100px; display:flex; align-items:center; justify-content:center; color:white; font-size: 40px;">▶️</div>
+                                    <div class="text-1">
+                                        <span>新手入门教学</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 视频2 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="#" onclick="alert('视频功能开发中')">
+                                    <div style="background: linear-gradient(135deg, #f093fb, #f5576c); height:100px; display:flex; align-items:center; justify-content:center; color:white; font-size: 40px;">🎬</div>
+                                    <div class="text-1">
+                                        <span>高级技巧分享</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 视频3 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="#" onclick="alert('视频功能开发中')">
+                                    <div style="background: linear-gradient(135deg, #4ecdc4, #44a08d); height:100px; display:flex; align-items:center; justify-content:center; color:white; font-size: 40px;">💡</div>
+                                    <div class="text-1">
+                                        <span>实战经验解析</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- 视频4 -->
+                            <div class="content-item">
+                                <a class="flex-2" href="#" onclick="alert('视频功能开发中')">
+                                    <div style="background: linear-gradient(135deg, #ffe259, #ffa751); height:100px; display:flex; align-items:center; justify-content:center; color:white; font-size: 40px;">📈</div>
+                                    <div class="text-1">
+                                        <span>赚钱攻略大全</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 优惠活动 -->
+                <div class="main-2">
+                    <div class="title">优惠活动</div>
+                    <a class="card card-bac2" href="#" onclick="alert('优惠活动大厅')">
+                        <div class="card-main">
+                            <div style="width:40px; height:40px; background: linear-gradient(135deg, #f093fb, #f5576c); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px;">💸</div>
+                            <div class="card-info">
+                                <p>优惠活动大厅</p>
+                                <p>各平台活动自助申请入口</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 实用工具 -->
+                <div class="main-2">
+                    <div class="title">实用工具</div>
+                    <a class="card card-bac2" href="#" onclick="alert('实用工具大全')">
+                        <div class="card-main">
+                            <div style="width:40px; height:40px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px;">🛠️</div>
+                            <div class="card-info">
+                                <p>实用工具大全</p>
+                                <p>提供各式各样的实用工具</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 查看全部视频 -->
+                <div class="main-2">
+                    <div class="title">查看全部视频</div>
+                    <a class="card card-bac2" href="#" onclick="alert('查看全部视频')">
+                        <div class="card-main">
+                            <div style="width:40px; height:40px; background: linear-gradient(135deg, #ffe259, #ffa751); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px;">🎥</div>
+                            <div class="card-info">
+                                <p>全部视频合集</p>
+                                <p>更新更多热门视频合集</p>
+                          </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Google搜索 -->
+                <div class="main-2">
+                    <div class="title google-logo">
+                        <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+                    </div>
+                    <a class="card" href="javascript:;">
+                        <div class="card-main">
+                            <div style="width:40px; height:40px; background: linear-gradient(135deg, #4285f4, #34a853); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px;">G</div>
+                            <div class="card-info">
+                                <p>防止迷路</p>
+                                <p>谷歌搜索"<font style="color: #4285f4;">甜GG致富合集</font>"即可获取本站</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 广告横幅 -->
+                <div class="main-3">
+                    <a href="https://lejva.tprsmi.com/app/register.php?site_id=1058" target="_blank">
+                        <img src="https://via.placeholder.com/800x200/f093fb/f5576c?text=胜天国际新台新人大水必红" alt="胜天国际新台新人大水必红">
+                        <div class="main-3-info">
+                            <p>点击访问胜天国际新台新人大水必红</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-sj">
+        <div class="footer-sj-main"></div>
+        <span>认准甜GG团队不迷路<sup>®</sup></span>
+    </div>
+
+    <script>
+        // 标签切换功能
+        function switchTab(tabIndex) {
+            // 更新标签样式
+            document.querySelectorAll('.tab').forEach((tab, index) => {
+                if (index === tabIndex) {
+                    tab.classList.add('li-active');
+                } else {
+                    tab.classList.remove('li-active');
+                }
+            });
+            
+            // 显示对应内容
+            document.querySelectorAll('.tab_cont').forEach((content, index) => {
+                if (index === tabIndex) {
+                    content.style.display = 'block';
+                } else {
+                    content.style.display = 'none';
+                }
+            });
+        }
+        
+        // 页面加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('甜GG致富合集 - 网站加载完成');
+        });
+    </script>
+</body>
 </html>
+
